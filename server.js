@@ -41,6 +41,14 @@ app.post("/register", (req, res) => {
     }
   );
 });
+<hr>
+
+<h2>Prijava</h2>
+<input id="loginEmail" placeholder="Email"><br>
+<input id="loginPassword" type="password" placeholder="Lozinka"><br>
+<button onclick="login()">Prijavi se</button>
+
+<p id="loginStatus"></p>
 
 // LOGIN
 app.post("/login", (req, res) => {
