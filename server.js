@@ -62,3 +62,28 @@ app.post("/login", (req, res) => {
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  db.get(
+    "SELECT id, email FROM users WHERE email = ? AND password = ?",
+    [email, password],
+    (err, row) => {
+      if (err) {
+        return res.status(500).json({ message: "Greška na serveru" });
+      }
+
+      if (!row) {
+        return res.status(401).json({ message: "Pogrešan email ili lozinka" });
+      }
+
+      res.json({
+        message: "Uspešna prijava",
+        user: row
+      });
+    }
+  );
+});
+
+
