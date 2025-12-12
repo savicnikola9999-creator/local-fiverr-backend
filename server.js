@@ -21,6 +21,44 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
+
+// REGISTRACIJA
+app.post("/register", (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email i lozinka su obavezni" });
+  }
+
+  db.run(
+    "INSERT INTO users (email, password) VALUES (?, ?)",
+    [email, password],
+    function (err) {
+      if (err) {
+        return res.status(400).json({ message: "Korisnik već postoji" });
+      }
+      res.json({ message: "Registracija uspešna ✅" });
+    }
+  );
+});
+
+// LOGIN
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  db.get(
+    "SELECT * FROM users WHERE email = ? AND password = ?",
+    [email, password],
+    (err, user) => {
+      if (!user) {
+        return res.status(401).json({ message: "Pogrešan email ili lozinka" });
+      }
+      res.json({ message: "Login uspešan ✅" });
+    }
+  );
+});
+
+
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
